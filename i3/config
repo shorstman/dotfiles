@@ -91,10 +91,10 @@ bindsym $mod+a focus parent
 #bindsym $mod+d focus child
 
 # Define workspace names
-set $workspace1 "1 "
-set $workspace2 "2 "
-set $workspace3 "3"
-set $workspace4 "4"
+set $workspace1 "1 "
+set $workspace2 "2 "
+set $workspace3 "3 "
+set $workspace4 "4 "
 set $workspace5 "5"
 set $workspace6 "6"
 set $workspace7 "7"
@@ -173,6 +173,7 @@ bindsym $mod+r mode "resize"
 
 # Define color variables
 set $bg-color 	         #2f343f
+set $border-color        #a7dbcf
 set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
@@ -180,13 +181,11 @@ set $urgent-bg-color     #E53935
 
 # Window colors
 #                       border              background         text                 indicator
-client.focused          $bg-color           $bg-color          $text-color          #00ff00
-client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
-client.focused_inactive $inactive-bg-color  $inactive-bg-color $inactive-text-color #00ff00
-client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          #00ff00
-
-# Hide indicator and edges
-hide_edge_borders both
+client.focused          $border-color       $bg-color          $text-color          $bg-color
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color $bg-color
+client.focused_inactive $border-color       $inactive-bg-color $inactive-text-color $bg-color
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
+new_window pixel 10
 
 # Start i3bar to display a workspace $workspacebar (plus the system information i3status
 # finds out, if available)
@@ -196,30 +195,47 @@ bar {
       		background $bg-color
       	    	separator #757575
       		#                  border             background         text
-      		focused_workspace  $bg-color          $bg-color          $text-color
+      		focused_workspace  $border-color      $bg-color          $text-color
       		inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-text-color
       		urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
 	      }
 }
 
+# Auto lock
+exec --no-startup-id xautolock -time 4 -locker "i3lock-wrapper -l"
+
+set $Locker i3lock-wrapper -l && sleep 1
+
+set $mode_system System (l) lock, (e) logout, (s) suspend, (h) hibernate, (r) reboot, (Shift+s) shutdown
+mode "$mode_system" {
+    bindsym l exec --no-startup-id $Locker, mode "default"
+    bindsym e exec --no-startup-id i3-msg exit, mode "default"
+    bindsym s exec --no-startup-id $Locker && systemctl suspend, mode "default"
+    bindsym h exec --no-startup-id $Locker && systemctl hibernate, mode "default"
+    bindsym r exec --no-startup-id systemctl reboot, mode "default"
+    bindsym Shift+s exec --no-startup-id  systemctl poweroff -i, mode "default"
+
+    # back to normal: Enter or Escape
+    bindsym Return mode "default"
+    bindsym Escape mode "default"
+}
+
+bindsym $mod+Delete mode "$mode_system"
+
 # start rofi (a program launcher)
-#bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -opacity "85" -bw 0 -font "System San Francisco Display 18" -color-normal "$bg-color","$text-color","$bg-color","$text-color","$bg-color"
 bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -bw 0 -font "System San Francisco Display 18"
 
 # Lock on mod+shift+x
 bindsym $mod+shift+x exec i3lock -c 000000
 
 # Pulse Audio controls
-bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 6 +5% #increase sound volume
-bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 6 -5% #decrease sound volume
-bindsym XF86AudioMute exec --no-startup-id pactl set-sink-volume 6 0% # mute sound
+bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume && exec --no-startup-id pactl set-sink-volume 6 +5% #increase sound volume
+bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume 0 -5% #decrease sound volume && exec --no-startup-id pactl set-sink-volume 6 -5% #decrease sound volume
+bindsym XF86AudioMute exec --no-startup-id pactl set-sink-volume 0 0% # mute sound && exec --no-startup-id pactl set-sink-volume 6 0% # mute sound
 
 # Sreen brightness controls
 bindsym XF86MonBrightnessUp exec sxbacklight -inc 20 # increase screen brightness
 bindsym XF86MonBrightnessDown exec xbacklight -dec 20 # decrease screen brightness
-
-# Touchpad controls
-bindsym XF86TouchpadToggle exec /some/path/toggletouchpad.sh # toggle touchpad
 
 # Media player controls
 bindsym XF86AudioPlay exec playerctl play-pause
@@ -227,9 +243,18 @@ bindsym XF86AudioNext exec playerctl next
 bindsym XF86AudioPrev exec playerctl previous
 
 # Startup Applications
-exec_always feh --bg-scale ~/Pictures/Wallpapers/wallpaper.jpg
+exec_always feh --bg-scale ~/Pictures/Wallpapers/wallpaper.*
 exec_always synclient MaxTapTime=0
+exec thunar
 
 # Force workspaces
-assign [class="Google-chrome"] $workspace2
+assign [class="Google-chrome"] $workspace3
+assign [class="Atom"] $workspace1
+assign [class="Thunar"] $workspace4
 for_window [class="Spotify"] move to workspace $workspace10
+
+
+# Gaps
+smart_gaps on
+gaps inner 15
+for_window [class=".*"] border pixel 0
