@@ -3,6 +3,10 @@
 
 #Download and install the basics
 if [[ $1 == *"i"* ]]; then
+
+  sudo apt update
+  sudo apt upgrade
+  sudo apt install compton
   sudo apt install i3
   sudo apt install i3blocks
   sudo apt install thunar

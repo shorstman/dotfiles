@@ -173,7 +173,7 @@ bindsym $mod+r mode "resize"
 
 # Define color variables
 set $bg-color 	         #2f343f
-set $border-color        #a7dbcf
+set $border-color        #81a9a0
 set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
@@ -181,7 +181,7 @@ set $urgent-bg-color     #E53935
 
 # Window colors
 #                       border              background         text                 indicator
-client.focused          $border-color       $bg-color          $text-color          $bg-color
+client.focused          $border-color       $border-color          $text-color          $bg-color
 client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color $bg-color
 client.focused_inactive $border-color       $inactive-bg-color $inactive-text-color $bg-color
 client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
@@ -226,7 +226,7 @@ bindsym $mod+Delete mode "$mode_system"
 bindsym $mod+d exec rofi -show run -lines 3 -eh 2 -width 100 -padding 800 -bw 0 -font "System San Francisco Display 18"
 
 # Lock on mod+shift+x
-bindsym $mod+shift+x exec i3lock -c 000000
+bindsym $mod+shift+x exec i3lock -i ~/Pictures/Wallpapers/wallpaper.*
 
 # Pulse Audio controls
 bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume 0 +5% #increase sound volume && exec --no-startup-id pactl set-sink-volume 6 +5% #increase sound volume
@@ -245,7 +245,8 @@ bindsym XF86AudioPrev exec playerctl previous
 # Startup Applications
 exec_always feh --bg-scale ~/Pictures/Wallpapers/wallpaper.*
 exec_always synclient MaxTapTime=0
-exec thunar
+exec google-chrome
+exec compton
 
 # Force workspaces
 assign [class="Google-chrome"] $workspace3
@@ -257,4 +258,41 @@ for_window [class="Spotify"] move to workspace $workspace10
 # Gaps
 smart_gaps on
 gaps inner 15
-for_window [class=".*"] border pixel 0
+for_window [class=".*"] border pixel 2
+
+set $mode_gaps Gaps: (o) outer, (i) inner
+set $mode_gaps_outer Outer Gaps: +|-|0 (local), Shift + +|-|0 (global)
+set $mode_gaps_inner Inner Gaps: +|-|0 (local), Shift + +|-|0 (global)
+bindsym $mod+Shift+g mode "$mode_gaps"
+
+mode "$mode_gaps" {
+        bindsym o      mode "$mode_gaps_outer"
+        bindsym i      mode "$mode_gaps_inner"
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+
+mode "$mode_gaps_inner" {
+        bindsym plus  gaps inner current plus 5
+        bindsym minus gaps inner current minus 5
+        bindsym 0     gaps inner current set 0
+
+        bindsym Shift+plus  gaps inner all plus 5
+        bindsym Shift+minus gaps inner all minus 5
+        bindsym Shift+0     gaps inner all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
+mode "$mode_gaps_outer" {
+        bindsym plus  gaps outer current plus 5
+        bindsym minus gaps outer current minus 5
+        bindsym 0     gaps outer current set 0
+
+        bindsym Shift+plus  gaps outer all plus 5
+        bindsym Shift+minus gaps outer all minus 5
+        bindsym Shift+0     gaps outer all set 0
+
+        bindsym Return mode "default"
+        bindsym Escape mode "default"
+}
