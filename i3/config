@@ -178,13 +178,14 @@ set $inactive-bg-color   #2f343f
 set $text-color          #f3f4f5
 set $inactive-text-color #676E7D
 set $urgent-bg-color     #E53935
+set $indicator-color     #d9dcd6
 
 # Window colors
 #                       border              background         text                 indicator
-client.focused          $border-color       $border-color      $text-color          $bg-color
-client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color $bg-color
-client.focused_inactive $border-color       $inactive-bg-color $inactive-text-color $bg-color
-client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $bg-color
+client.focused          $border-color       $border-color      $text-color          $indicator-color
+client.unfocused        $inactive-bg-color  $inactive-bg-color $inactive-text-color $indicator-color
+client.focused_inactive $border-color       $inactive-bg-color $inactive-text-color $indicator-color
+client.urgent           $urgent-bg-color    $urgent-bg-color   $text-color          $indicator-color
 new_window pixel 10
 
 # Start i3bar to display a workspace $workspacebar (plus the system information i3status
@@ -296,3 +297,7 @@ mode "$mode_gaps_outer" {
         bindsym Return mode "default"
         bindsym Escape mode "default"
 }
+
+# Screenshots
+bindsym $mod+p exec "gnome-screenshot"
+bindsym $mod+Shift+p exec "gnome-screenshot -a"
