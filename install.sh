@@ -1,5 +1,5 @@
 #!/bin/bash
-#THIS SCRIPT HAS NOT BEEN TESTED. USE AT YOUR OWN RISK
+#THIS SCRIPT HAS NOT BEEN TESTED. USE AT YOUR OWN RISK.
 
 #Download and install the basics
 if [[ $1 == *"i"* ]]; then
