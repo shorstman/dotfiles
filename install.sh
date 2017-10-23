@@ -1,6 +1,10 @@
 #!/bin/bash
 #THIS SCRIPT HAS NOT BEEN TESTED. USE AT YOUR OWN RISK.
 
+if [[$1 == ""]]; then
+  $1 = "icr"
+fi
+
 #Download and install the basics
 if [[ $1 == *"i"* ]]; then
 
@@ -41,5 +45,23 @@ if [[ $1 == *"c"* ]]; then
   cp ./settings.ini ~/.config/gtk-3.0/
   cp ./.gtkrc-2.0 ~/
   mkdir ~/Pictures/Wallpapers
-  cp ./wallpaper.png ~/Pictures/Wallpapers/
+  cp ./wallpaper.* ~/Pictures/Wallpapers/
+  cp ./i3batwarn.sh ~/
+fi
+
+#Reminders for things that need to be done manually
+if [[ $1 == *"r"* ]]; then
+  echo Set horizontal scrolling with xinput
+  echo Find the touchpad id
+  xinput --list
+  read $touchpad
+  echo Find two finger scrolling
+  xinput --watch-prop $touchpad
+  read $scrolling
+  xinput --set-prop $touchpad "$scrolling" 1 1
+
+  echo
+  echo "Set cronjob for battery reminder as:"
+  echo "*/1 * * * * /home/<user>/.i3batwarn.sh"
+  crontab -e
 fi

@@ -248,6 +248,7 @@ exec_always feh --bg-scale ~/Pictures/Wallpapers/wallpaper.*
 exec_always synclient MaxTapTime=0
 exec google-chrome
 exec compton
+exec_always --no-startup-id nm-applet
 
 # Force workspaces
 assign [class="Google-chrome"] $workspace3
