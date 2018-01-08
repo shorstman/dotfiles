@@ -227,7 +227,7 @@ bindsym XF86AudioPrev exec playerctl previous
 # Startup Applications
 exec_always feh --bg-scale ~/Pictures/Wallpapers/wallpaper.*
 exec_always synclient MaxTapTime=0
-exec /usr/bin/compton --config /home/sam/.config/compton.conf
+exec_always /usr/bin/compton --config /home/sam/.config/compton.conf
 exec google-chrome
 exec powertop --auto-tune
 exec --no-startup-id nm-applet
@@ -285,5 +285,6 @@ mode "$mode_gaps_outer" {
 bindsym $mod+p exec "gnome-screenshot"
 bindsym $mod+Shift+p exec "gnome-screenshot -a"
 
-#DRUNK NONSENSE
-bindsym $mod+Shift+d exec "cd ~/Documents/Git/Hyperloop"
+#Switch keyboard layouts
+bindsym $mod+q exec "setxkbmap us"
+bindsym $mod+Shift+d exec "setxkbmap us -variant colemak"

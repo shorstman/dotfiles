@@ -44,6 +44,7 @@ if [[ $1 == *"c"* ]]; then
   cp ./i3/i3blocks.conf ~/.config/i3/
   cp ./settings.ini ~/.config/gtk-3.0/
   cp ./.gtkrc-2.0 ~/
+  cp ./network.sh ~/.config/i3/
   mkdir ~/Pictures/Wallpapers
   cp ./wallpaper.* ~/Pictures/Wallpapers/
   cp ./i3batwarn.sh ~/
